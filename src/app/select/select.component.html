@@ -1,0 +1,43 @@
+<div class="w-full flex-column">
+  <!-- Label  -->
+  <label for="defaultProviders" class="text-lg m-3">Default Providers</label>
+
+  <!-- Open search-bar here -->
+  <div (click)="openSelect()"
+    class="search-bar-trigger w-full h-3rem p-4 mb-3 border-round-sm border-1 border-solid flex flex-row align-items-center justify-content-between"
+    [ngClass]="{'open': isSelectOpen}">
+    <div class="flex flex-row">
+      <div *ngIf="selectedItems.length === 0">Search...</div>
+      <div *ngFor="let item of selectedItems">
+        <div *ngIf="item" class="pr-2">{{item.name}}</div>
+      </div>
+    </div>
+    <img src="../../assets/caret.svg" alt="caret-icon" class="w-1rem h-1rem">
+  </div>
+
+  <!-- Search-bar dropdown -->
+  <div class="dropdown" [ngClass]="{'open': isSelectOpen}">
+    <div class="search-bar flex flex-row align-items-center pb-2 mb-1">
+      <input type="checkbox" (change)="selectAll($event)" class="w-2rem h-2rem mr-2" />
+      <div class="search-container">
+        <input id="defaultProviders" pInputText type="text" [(ngModel)]="searchText" placeholder="Search by name or NPI"
+          (input)="filterItems(searchText)" class="search-input border-round-sm p-2 h-3rem" />
+        <img src="../../assets/search.svg" alt="search-icon" class="search-icon w-2rem h-2rem"
+          (click)="filterItems(searchText)">
+        <img src="../../assets/close.svg" alt="clear-icon" class="clear-icon w-2rem h-2rem" (click)="searchText = ''">
+      </div>
+    </div>
+    <div class="items-container p-dropdown-panel p-shadow-2">
+      <div *ngIf="filterItems(searchText).length === 0"
+        class="w-full h-3rem flex flex-row justify-content-center align-items-center">Loading Providers...</div>
+      <div *ngFor="let item of filterItems(searchText)" (click)="selectItem(item)"
+        class="p-dropdown-item flex flex-row align-items-center mb-1">
+        <input type="checkbox" [checked]="selectedItems.includes(item)" (change)="selectItem(item, $event)"
+          class="w-1rem h-1rem mr-1 mb-1" />
+        <div class="flex flex-row justify-content-center align-items-center mb-1">
+          {{item.name}} - {{item.age}}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
